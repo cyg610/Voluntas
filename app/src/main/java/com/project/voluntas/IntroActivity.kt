@@ -15,7 +15,7 @@ class IntroActivity : AppCompatActivity() {
 
         var handler = Handler()
         handler.postDelayed({
-            var intent = Intent(this, MainActivity::class.java)
+            var intent = Intent(this, SidoActivity::class.java)
             startActivity(intent)
         },3000)
     }
