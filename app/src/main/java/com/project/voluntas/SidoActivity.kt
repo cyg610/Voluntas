@@ -2,13 +2,9 @@ package com.project.voluntas
 
 import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_sido.*
 
 class SidoActivity : Activity(), View.OnClickListener {
 

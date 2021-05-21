@@ -1,43 +1,43 @@
 package com.project.voluntas
 
-import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.project.voluntas.databinding.ListviewItemBinding
 
-class MainListAdapter(val context:Context, val VoluntasList:ArrayList<Data>) : BaseAdapter() {
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-      val view: View = LayoutInflater.from(context).inflate(R.layout.listview_item, null)
 
-        //view를 listview_item.xml 파일의 각 view와 연결
-        val V_Title = view.findViewById<TextView>(R.id.ListView_Item_Title)
-        val V_Work = view.findViewById<TextView>(R.id.ListView_Item_Work)
-        val V_Date = view.findViewById<TextView>(R.id.ListView_Item_Date)
-        val V_Condition = view.findViewById<TextView>(R.id.ListView_Item_Condition)
+class MainListAdapter(data1: ArrayList<Data>) :RecyclerView.Adapter<Holder>() {
 
-        //ArrayList<Data>의 변수 데이터를 TextView에 적용
-        val Data = VoluntasList[position]
-        V_Title.text = Data.title
-        V_Work.text = Data.work
-        V_Date.text = Data.date
-        V_Condition.text = Data.condition
+        var listData = data1
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
+            val binding = ListviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return Holder(binding)
+        }
 
-        return view
+        override fun getItemCount(): Int {
+            return listData.size
+        }
+
+        override fun onBindViewHolder(holder: Holder, position: Int) {
+            val data = listData.get(position)
+            holder.setRecycler(data)
+        }
+
+
+
     }
 
-    override fun getItem(position: Int): Any {
-        return VoluntasList[position]
-    }
-
-    override fun getItemId(position: Int): Long {
-      return 0
-    }
-
-    override fun getCount(): Int {
-        return VoluntasList.size
+    class Holder(val binding: ListviewItemBinding) : RecyclerView.ViewHolder(binding.root){
+        fun setRecycler(data: Data){
+            binding.ListViewItemTitle.text = "${data.gettitle()}"
+        }
     }
 
 
-}
+
+
+
+
+
+

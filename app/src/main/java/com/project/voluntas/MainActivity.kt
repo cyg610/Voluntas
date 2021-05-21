@@ -1,42 +1,50 @@
 package com.project.voluntas
 
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.widget.ListView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import org.w3c.dom.Document
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.project.voluntas.databinding.ActivityMainBinding
 import org.w3c.dom.Element
-import org.w3c.dom.Node
-import org.w3c.dom.NodeList
-import java.lang.Exception
 import java.net.URL
 import javax.xml.parsers.DocumentBuilderFactory
 
 
 class MainActivity : AppCompatActivity() {
 
-    var VoluntasList = arrayListOf<Data>()
+    val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private lateinit var RecyclerView:RecyclerView
+    val data1 = ArrayList<Data>()
+    val adapter = MainListAdapter(data1)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
-        val ListView = findViewById<ListView>(R.id.ListView)
-
-        //어뎁터설정
-        val VoluntasAdapter = MainListAdapter(this, VoluntasList)
-        ListView.adapter = VoluntasAdapter
+        RecyclerView = findViewById<RecyclerView>(R.id.RecyclerView)
 
         //네트워크 스레드
+
+
         var thread = NetworkThread()
         thread.start()
+
+        data1.add(Data("sdfsdf","","",1))
+
+
+        binding.RecyclerView.adapter = adapter
+        binding.RecyclerView.layoutManager = LinearLayoutManager(this)
 
 
     }
 
     inner class NetworkThread :Thread() {
+        @RequiresApi(Build.VERSION_CODES.Q)
         override fun run() {
             try {
+
 
                 //URL DATA
                 var sido = intent.getStringExtra("SidoKey")
@@ -51,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 var doc = builder.parse(input)
                 var root = doc.documentElement
                 var item_node_list = root.getElementsByTagName("item")
+
                 for (i in 0 until item_node_list.length){
                     var item_element = item_node_list.item(i) as Element
                     var organNM_list = item_element.getElementsByTagName("organNm")
@@ -59,10 +68,11 @@ class MainActivity : AppCompatActivity() {
                     var organNM = organNM_node.textContent
 
                     runOnUiThread{
-                        Log.d("APITEST","봉사기관: ${organNM}\n")
-                        VoluntasList = arrayListOf<Data>(
-                           // Data("${organNM}"," "," "," ",1)
-                        )
+                     //   Log.d("APITEST","봉사기관: ${organNM}\n")
+
+                        var Add_Data = Data("${organNM}","가나다라","",1)
+                        data1.add(Add_Data)
+
                     }
 
                 }
@@ -73,6 +83,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
 }
+
+
 
 
